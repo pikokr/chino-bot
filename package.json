@@ -10,5 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "discord-akairo": "^8.1.0",
+    "discord.js": "^12.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.13",
+    "ts-node": "^9.1.1"
   }
 }
