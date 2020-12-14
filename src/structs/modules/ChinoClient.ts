@@ -4,12 +4,16 @@ import {Message, Team, User} from "discord.js";
 import Dokdo from "dokdo";
 import path from "path";
 
-class ChinoClient extends AkairoClient {
-    _dokdo?: Dokdo
-    _commandHandler: CommandHandler
-    _listerHandler: ListenerHandler
-    _inhibitorHandler: InhibitorHandler
+declare module 'discord.js' {
+    interface Client {
+        _dokdo?: Dokdo
+        _commandHandler: CommandHandler
+        _listenerHandler: ListenerHandler
+        _inhibitorHandler: InhibitorHandler
+    }
+}
 
+class ChinoClient extends AkairoClient {
     constructor() {
         super({
             disableMentions: "everyone",
@@ -23,22 +27,23 @@ class ChinoClient extends AkairoClient {
         });
         this._commandHandler = new CommandHandler(this, {
             directory: path.resolve(path.join(__dirname, '../../commands')),
-            prefix: config.commandPrefix
+            prefix: config.commandPrefix,
+            automateCategories: true
         })
-        this._listerHandler = new ListenerHandler(this, {
+        this._listenerHandler = new ListenerHandler(this, {
             directory: path.resolve(path.join(__dirname, '../../listeners')),
         })
         this._inhibitorHandler = new InhibitorHandler(this, {
             directory: path.resolve(path.join(__dirname, '../../inhibitors')),
         })
         this._commandHandler.useInhibitorHandler(this._inhibitorHandler)
-        this._listerHandler.setEmitters({
+        this._listenerHandler.setEmitters({
             client: this,
             commandHandler: this._commandHandler,
-            listerHandler: this._listerHandler
+            listerHandler: this._listenerHandler
         })
 
-        this._listerHandler.loadAll()
+        this._listenerHandler.loadAll()
         this._commandHandler.loadAll()
         this._inhibitorHandler.loadAll()
     }
