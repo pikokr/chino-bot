@@ -18,7 +18,8 @@ class ChinoClient extends AkairoClient {
                 activity: {
                     name: `${config.commandPrefix}도움말`
                 }
-            }
+            },
+            restTimeOffset: 0
         });
         this._commandHandler = new CommandHandler(this, {
             directory: path.resolve(path.join(__dirname, '../../commands')),
@@ -60,6 +61,7 @@ class ChinoClient extends AkairoClient {
                 'util'
             ]
         })
+        this.on('message', this._dokdo.run.bind(this._dokdo))
     }
 }
 
