@@ -1,4 +1,8 @@
 {
   "token": "",
-  "commandPrefix": "치노야 "
+  "commandPrefix": "치노야 ",
+  "ipc": {
+    "url": "",
+    "secret": ""
+  }
 }

@@ -3,6 +3,7 @@ import config from '../../../config.json'
 import {Message, Team, User} from "discord.js";
 import Dokdo from "dokdo";
 import path from "path";
+import io from 'socket.io-client'
 
 declare module 'discord.js' {
     interface Client {
@@ -10,6 +11,7 @@ declare module 'discord.js' {
         _commandHandler: CommandHandler
         _listenerHandler: ListenerHandler
         _inhibitorHandler: InhibitorHandler
+        ipc: SocketIOClient.Socket
     }
 }
 
@@ -41,6 +43,16 @@ class ChinoClient extends AkairoClient {
             client: this,
             commandHandler: this._commandHandler,
             listerHandler: this._listenerHandler
+        })
+
+        this.ipc = io(config.ipc.url, {
+            query: {
+                auth: config.ipc.secret
+            }
+        })
+
+        this.ipc.on('connect', () => {
+            console.log('Backend IPC Connected.')
         })
 
         this._listenerHandler.loadAll()
